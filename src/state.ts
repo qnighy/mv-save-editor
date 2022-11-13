@@ -1,8 +1,12 @@
 import React from "react";
-import produce, { Draft } from "immer";
+import produce from "immer";
 import LZString from "lz-string";
 
-export type Action = StartImportAction | FailImportAction | FinishImportAction;
+export type Action =
+  | StartImportAction
+  | FailImportAction
+  | FinishImportAction
+  | EditAction;
 export type StartImportAction = {
   readonly type: "IMPORT/START";
 };
@@ -13,6 +17,11 @@ export type FailImportAction = {
 export type FinishImportAction = {
   readonly type: "IMPORT/FINISH";
   readonly content: JSONValue;
+};
+export type EditAction = {
+  readonly type: "EDIT";
+  readonly path: readonly (number | string)[];
+  readonly newValue: JSONValue;
 };
 
 export type JSONValue = {
@@ -28,6 +37,9 @@ export function failImport(error: string): FailImportAction {
 }
 export function finishImport(content: JSONValue): FinishImportAction {
   return { type: "IMPORT/FINISH", content };
+}
+export function edit(path: readonly (number | string)[], newValue: JSONValue): EditAction {
+  return { type: "EDIT", path, newValue };
 }
 
 export function doImport(dispatch: React.Dispatch<Action>, file: Blob | string) {
@@ -72,5 +84,43 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
       state.importError = undefined;
       (state as any).editContent = action.content;
       break;
+    case "EDIT":
+      if ((state as any).editContent !== undefined) {
+        if (action.path.length === 0) {
+          (state as any).editContent = action.newValue;
+        } else {
+          applyEdit((state as any).editContent, action.path, action.newValue);
+        }
+      }
+      break;
   }
 });
+
+function applyEdit(editContent: any, path: readonly (number | string)[], newValue: JSONValue) {
+  let currentRef: [any, string | number] = [] as any;
+  let current = editContent;
+  for (const segment of path) {
+    if (typeof segment === "string" && isObject(current) && !Array.isArray(current)) {
+      if (Object.hasOwn(current, segment)) {
+        currentRef = [current, segment];
+        current = (current as any)[segment];
+        continue;
+      }
+    } else if (typeof segment === "number" && Array.isArray(current)) {
+      if (Object.hasOwn(current, segment)) {
+        currentRef = [current, segment];
+        current = current[segment];
+        continue;
+      }
+    }
+    return;
+  }
+  {
+    const [current, segment] = currentRef;
+    (current as any)[segment] = newValue;
+  }
+}
+
+function isObject(x: unknown): x is object {
+  return (typeof x === "object" || typeof x === "function") && x !== null;
+}

@@ -1,29 +1,52 @@
-import React from 'react';
-import { JSONValue, JSONPath } from './state';
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
+import { JSONValue, JSONPath, Action, edit } from './state';
 import { Accordion } from './Accordion';
 import './JsonEditor.css';
 
 export type JsonEditorProps = {
+  dispatch: React.Dispatch<Action>;
   editContent: JSONValue;
   path: JSONPath;
   prepend: string;
   append: string;
 };
 export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
-  const { editContent, path, prepend, append } = props;
-  if (typeof editContent === "string") {
+  const { dispatch, editContent, path, prepend, append } = props;
+  const [editingText, setEditingText] = useState<string | null>(null);
+
+  if (editingText != null) {
+    let newValue: JSONValue | undefined = undefined;
+    try {
+      newValue = JSON.parse(editingText);
+    } catch {}
+    const hasError = newValue === undefined;
     return (
-      <>{prepend}{JSON.stringify(editContent)}{append}</>
+      <div className="editor-line">
+        {prepend}
+        <input
+          className={hasError ? "json-text-editor json-text-error" : "json-text-editor"}
+          type="text"
+          value={editingText}
+          onInput={(e) => setEditingText(e.currentTarget.value)}
+          onChange={(e) => setEditingText(e.currentTarget.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && newValue !== undefined) {
+              setEditingText(null);
+              dispatch(edit(path, newValue))
+            }
+          }}
+        />
+        {append}
+        <button className="editor-tool">
+          <FontAwesomeIcon icon={solid("pencil")} />
+        </button>
+      </div>
     );
-  } else if (typeof editContent === "number") {
-    return <>{prepend}{editContent}{append}</>
-  } else if (typeof editContent === "boolean") {
-    return <>{prepend}{`${editContent}`}{append}</>
-  } else if (editContent === null) {
-    return <>{prepend}null{append}</>
   } else if (Array.isArray(editContent)) {
     return <>{prepend}[...]{append}</>;
-  } else {
+  } else if (isObject(editContent)) {
     return (
       <Accordion
         head={`${prepend}{`}
@@ -35,6 +58,7 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
               className="json-indent"
             >
               <JsonEditor
+                dispatch={dispatch}
                 editContent={value}
                 path={[...path, key]}
                 prepend={`${JSON.stringify(key)}: `}
@@ -47,6 +71,21 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
         {append}
       </Accordion>
     );
+  } else {
+    return (
+      <div className="editor-line">
+        {prepend}{JSON.stringify(editContent)}{append}
+        <button
+          className="editor-tool"
+          onClick={() => setEditingText(JSON.stringify(editContent))}
+        >
+          <FontAwesomeIcon icon={solid("pencil")} />
+        </button>
+      </div>
+    );
   }
-  return <>{prepend}</>;
+}
+
+function isObject(x: unknown): x is object {
+  return (typeof x === "object" || typeof x === "function") && x !== null;
 }
