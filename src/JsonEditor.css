@@ -1,3 +1,12 @@
+button.accordion-expander {
+  all: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+button.accordion-expander:focus-visible {
+  outline: 1px solid blue;
+}
+
 .json-indent {
   padding-left: 1em;
   border-left: 1px solid #cccccc;

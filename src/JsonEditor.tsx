@@ -2,8 +2,9 @@ import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { JSONValue, JSONPath, Action, edit } from './state';
-import { Accordion } from './Accordion';
+import { useAccordion } from './useAccordion';
 import './JsonEditor.css';
+import { DivFix } from './DivFix';
 
 export type JsonEditorProps = {
   dispatch: React.Dispatch<Action>;
@@ -13,55 +14,12 @@ export type JsonEditorProps = {
   prepend: string;
   append: string;
 };
-export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
+export const JsonEditor = React.memo(JsonEditorWorker);
+export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | null {
   const { dispatch, editContent, path1, path2, prepend, append } = props;
   const path = useMemo(() => [...path1, path2], [path1, path2]);
   const [editingText, setEditingText] = useState<string | null>(null);
-  const body = useMemo(() => (
-    <JsonEditorBody
-      dispatch={dispatch}
-      editContent={editContent}
-      path={path}
-      prepend={prepend}
-      append={append}
-      editingText={editingText}
-      setEditingText={setEditingText}
-    />
-  ), [append, dispatch, editContent, editingText, path, prepend]);
-  if (editingText != null) {
-    return body;
-  } else if (Array.isArray(editContent)) {
-    return (
-      <Accordion
-        head={`${prepend}[`}
-      >
-        {body}
-      </Accordion>
-    );
-  } else if (isObject(editContent)) {
-    return (
-      <Accordion
-        head={`${prepend}{`}
-      >
-        {body}
-      </Accordion>
-    );
-  } else {
-    return body;
-  }
-}
-
-export type JsonEditorBodyProps = {
-  dispatch: React.Dispatch<Action>;
-  editContent: JSONValue;
-  path: JSONPath;
-  prepend: string;
-  append: string;
-  editingText: string | null;
-  setEditingText: React.Dispatch<React.SetStateAction<string | null>>;
-};
-function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
-  const { dispatch, editContent, path, prepend, append, editingText, setEditingText } = props;
+  const { expanded, expanderProps, regionProps } = useAccordion();
   if (editingText != null) {
     let newValue: JSONValue | undefined = undefined;
     try {
@@ -114,51 +72,63 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
     );
   } else if (Array.isArray(editContent)) {
     return (
-      <>
-        {
-          editContent.map((value: JSONValue, i, list) => (
-            <div
-              key={i}
-              className="json-indent"
-            >
-              <JsonEditor
-                dispatch={dispatch}
-                editContent={value}
-                path1={path}
-                path2={i}
-                prepend={`${JSON.stringify(i)}: `}
-                append={i + 1 === list.length ? "" : ","}
-              />
-            </div>
-          ))
-        }
-        ]
-        {append}
-      </>
+      <div>
+        <button className="accordion-expander" {...expanderProps}>
+          <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
+          {prepend}{"["}
+        </button>
+        <DivFix {...regionProps}>
+          {
+            editContent.map((value: JSONValue, i, list) => (
+              <div
+                key={i}
+                className="json-indent"
+              >
+                <JsonEditor
+                  dispatch={dispatch}
+                  editContent={value}
+                  path1={path}
+                  path2={i}
+                  prepend={`${JSON.stringify(i)}: `}
+                  append={i + 1 === list.length ? "" : ","}
+                />
+              </div>
+            ))
+          }
+          ]
+          {append}
+        </DivFix>
+      </div>
     );
   } else if (isObject(editContent)) {
     return (
-      <>
-        {
-          Object.entries(editContent).map(([key, value], i, list) => (
-            <div
-              key={key}
-              className="json-indent"
-            >
-              <JsonEditor
-                dispatch={dispatch}
-                editContent={value}
-                path1={path}
-                path2={key}
-                prepend={`${JSON.stringify(key)}: `}
-                append={i + 1 === list.length ? "" : ","}
-              />
-            </div>
-          ))
-        }
-        {"}"}
-        {append}
-      </>
+      <div>
+        <button className="accordion-expander" {...expanderProps}>
+          <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
+          {prepend}{"{"}
+        </button>
+        <DivFix {...regionProps}>
+          {
+            Object.entries(editContent).map(([key, value], i, list) => (
+              <div
+                key={key}
+                className="json-indent"
+              >
+                <JsonEditor
+                  dispatch={dispatch}
+                  editContent={value}
+                  path1={path}
+                  path2={key}
+                  prepend={`${JSON.stringify(key)}: `}
+                  append={i + 1 === list.length ? "" : ","}
+                />
+              </div>
+            ))
+          }
+          {"}"}
+          {append}
+        </DivFix>
+      </div>
     );
   } else {
     const startEditing = () => setEditingText(JSON.stringify(editContent));
