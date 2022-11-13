@@ -10,6 +10,7 @@ export type Action =
   | DiscardAction;
 export type StartImportAction = {
   readonly type: "IMPORT/START";
+  readonly filename?: string | undefined;
 };
 export type FailImportAction = {
   readonly type: "IMPORT/FAIL";
@@ -17,6 +18,7 @@ export type FailImportAction = {
 };
 export type FinishImportAction = {
   readonly type: "IMPORT/FINISH";
+  readonly filename?: string | undefined;
   readonly content: JSONValue;
 };
 export type EditAction = {
@@ -35,14 +37,14 @@ export type JSONObject = {
 export type JSONArray = readonly JSONValue[];
 export type JSONPath = readonly (string | number)[];
 
-export function startImport(): StartImportAction {
-  return { type: "IMPORT/START" };
+export function startImport(filename: string | undefined): StartImportAction {
+  return { type: "IMPORT/START", filename };
 }
 export function failImport(error: string): FailImportAction {
   return { type: "IMPORT/FAIL", error };
 }
-export function finishImport(content: JSONValue): FinishImportAction {
-  return { type: "IMPORT/FINISH", content };
+export function finishImport(filename: string | undefined, content: JSONValue): FinishImportAction {
+  return { type: "IMPORT/FINISH", filename, content };
 }
 export function edit(path: readonly (number | string)[], newValue: JSONValue): EditAction {
   return { type: "EDIT", path, newValue };
@@ -52,15 +54,19 @@ export function discard(): DiscardAction {
 }
 
 export function doImport(dispatch: React.Dispatch<Action>, file: Blob | string) {
+  const filename =
+    file instanceof File
+    ? file.name
+    : undefined;
   const promise = (async () => {
-    dispatch(startImport());
+    dispatch(startImport(filename));
     const fileContent =
       typeof file === "string"
       ? file
       : await file.text();
     const json = LZString.decompressFromBase64(fileContent) ?? "";
     const obj = JSON.parse(json);
-    dispatch(finishImport(obj));
+    dispatch(finishImport(filename, obj));
   })();
   promise.catch((e) => {
     dispatch(failImport(`${e}`))
@@ -74,6 +80,7 @@ export function getResult(content: JSONValue): string {
 export type State = {
   readonly importing: boolean;
   readonly importError?: string | undefined;
+  readonly filename?: string | undefined;
   readonly editContent?: JSONValue | undefined;
 };
 
@@ -86,6 +93,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
     case "IMPORT/START":
       state.importing = true;
       state.importError = undefined;
+      state.filename = action.filename;
       (state as any).editContent = undefined;
       break;
     case "IMPORT/FAIL":
@@ -95,6 +103,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
     case "IMPORT/FINISH":
       state.importing = false;
       state.importError = undefined;
+      state.filename = action.filename;
       (state as any).editContent = action.content;
       break;
     case "EDIT":
@@ -105,6 +114,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
     case "DISCARD":
       state.importing = false;
       state.importError = undefined;
+      state.filename = undefined;
       (state as any).editContent = undefined;
       break;
   }

@@ -67,7 +67,12 @@ function App() {
         )
         : (
           <>
-            <DownloadLink blob={resultBlob!} download="edit.rpgsave">
+            <DownloadLink
+              blob={resultBlob!}
+              download={
+                state.filename ? `edit-${state.filename}` : "edit.rpgsave"
+              }
+            >
               <FontAwesomeIcon icon={solid("cloud-arrow-down")} />
               Download
             </DownloadLink>
