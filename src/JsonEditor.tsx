@@ -95,14 +95,20 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
           onClick={applyChange}
           disabled={hasError}
         >
-          <FontAwesomeIcon icon={solid("check")} />
+          <FontAwesomeIcon
+            title="Apply change"
+            icon={solid("check")}
+          />
         </button>
         <button
           onClick={() => {
             setEditingText(null);
           }}
         >
-          <FontAwesomeIcon icon={solid("times")} />
+          <FontAwesomeIcon
+            title="Discard change"
+            icon={solid("times")}
+          />
         </button>
       </div>
     );
@@ -167,7 +173,10 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
           className="editor-tool"
           onClick={startEditing}
         >
-          <FontAwesomeIcon icon={solid("pencil")} />
+          <FontAwesomeIcon
+            title="Edit this property"
+            icon={solid("pencil")}
+          />
         </button>
       </div>
     );
