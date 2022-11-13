@@ -93,6 +93,7 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
         <button
           className="editor-tool"
           onClick={applyChange}
+          disabled={hasError}
         >
           <FontAwesomeIcon icon={solid("check")} />
         </button>
@@ -154,12 +155,17 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
       </>
     );
   } else {
+    const startEditing = () => setEditingText(JSON.stringify(editContent));
     return (
       <div className="editor-line">
-        {prepend}{JSON.stringify(editContent)}{append}
+        <span
+          onDoubleClick={startEditing}
+        >
+          {`${prepend}${JSON.stringify(editContent)}${append}`}
+        </span>
         <button
           className="editor-tool"
-          onClick={() => setEditingText(JSON.stringify(editContent))}
+          onClick={startEditing}
         >
           <FontAwesomeIcon icon={solid("pencil")} />
         </button>
