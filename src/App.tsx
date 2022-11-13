@@ -51,9 +51,10 @@ function App() {
         )
         : (
           <JsonEditor
-            prepend=""
             editContent={state.editContent}
             path={[]}
+            prepend=""
+            append=""
           />
         )
       }

@@ -4,41 +4,47 @@ import { Accordion } from './Accordion';
 import './JsonEditor.css';
 
 export type JsonEditorProps = {
-  prepend: string;
   editContent: JSONValue;
   path: JSONPath;
+  prepend: string;
+  append: string;
 };
 export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
-  const { prepend, editContent, path } = props;
+  const { editContent, path, prepend, append } = props;
   if (typeof editContent === "string") {
-    return <input type="text" value={editContent} />;
+    return (
+      <>{prepend}{JSON.stringify(editContent)}{append}</>
+    );
   } else if (typeof editContent === "number") {
-    
+    return <>{prepend}{editContent}{append}</>
   } else if (typeof editContent === "boolean") {
-    
+    return <>{prepend}{`${editContent}`}{append}</>
   } else if (editContent === null) {
-    
+    return <>{prepend}null{append}</>
   } else if (Array.isArray(editContent)) {
-    return <>[...]</>;
+    return <>{prepend}[...]{append}</>;
   } else {
     return (
       <Accordion
         head={`${prepend}{`}
       >
         {
-          Object.entries(editContent).map(([key, value]) => (
+          Object.entries(editContent).map(([key, value], i, list) => (
             <div
               key={key}
               className="json-indent"
             >
               <JsonEditor
-                prepend={`${JSON.stringify(key)}: `}
                 editContent={value}
                 path={[...path, key]}
+                prepend={`${JSON.stringify(key)}: `}
+                append={i + 1 === list.length ? "" : ","}
               />
             </div>
           ))
         }
+        {"}"}
+        {append}
       </Accordion>
     );
   }
