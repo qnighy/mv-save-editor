@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useReducer, useRef } from 'react';
 import './App.css';
+import { reduce, initialState, doImport } from './state';
 
 function App() {
+  const [state, dispatch] = useReducer(reduce, initialState);
+  const savedataTextarea = useRef<HTMLTextAreaElement>(null);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <h1>Save Editor</h1>
+      <label>
+        <div>
+          Input file:
+          <input
+            type="file"
+            accept=".rpgsave"
+            onChange={(e) => {
+              if (e.currentTarget.files && e.currentTarget.files.length > 0) {
+                doImport(dispatch, e.currentTarget.files[0]);
+              }
+            }}
+            disabled={state.importing}
+          />
+        </div>
+      </label>
+      <label>
+        <div>Or paste the content directly:</div>
+        <div>
+          <textarea ref={savedataTextarea} className="savedata" disabled={state.importing}></textarea>
+        </div>
+        <button
+          onClick={() => {
+            if (savedataTextarea.current) {
+              doImport(dispatch, savedataTextarea.current.value);
+            }
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          OK
+        </button>
+      </label>
+      {
+        state.importError &&
+        <p className="error-message">{state.importError}</p>
+      }
     </div>
   );
 }
