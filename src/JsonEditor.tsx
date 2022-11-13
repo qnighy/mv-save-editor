@@ -101,7 +101,7 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
                   editContent={value}
                   path1={path}
                   path2={i}
-                  prepend={`${JSON.stringify(i)}: `}
+                  prepend=""
                   append={i + 1 === list.length ? "" : ","}
                 />
               </div>
