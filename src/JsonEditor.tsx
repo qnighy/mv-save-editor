@@ -45,7 +45,30 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
       </div>
     );
   } else if (Array.isArray(editContent)) {
-    return <>{prepend}[...]{append}</>;
+    return (
+      <Accordion
+        head={`${prepend}[`}
+      >
+        {
+          editContent.map((value: JSONValue, i, list) => (
+            <div
+              key={i}
+              className="json-indent"
+            >
+              <JsonEditor
+                dispatch={dispatch}
+                editContent={value}
+                path={[...path, i]}
+                prepend={`${JSON.stringify(i)}: `}
+                append={i + 1 === list.length ? "" : ","}
+              />
+            </div>
+          ))
+        }
+        ]
+        {append}
+      </Accordion>
+    );
   } else if (isObject(editContent)) {
     return (
       <Accordion
