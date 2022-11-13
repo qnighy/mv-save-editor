@@ -17,7 +17,51 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
   const { dispatch, editContent, path1, path2, prepend, append } = props;
   const path = useMemo(() => [...path1, path2], [path1, path2]);
   const [editingText, setEditingText] = useState<string | null>(null);
+  const body = useMemo(() => (
+    <JsonEditorBody
+      dispatch={dispatch}
+      editContent={editContent}
+      path={path}
+      prepend={prepend}
+      append={append}
+      editingText={editingText}
+      setEditingText={setEditingText}
+    />
+  ), [append, dispatch, editContent, editingText, path, prepend]);
+  if (editingText != null) {
+    return body;
+  } else if (Array.isArray(editContent)) {
+    return (
+      <Accordion
+        head={`${prepend}[`}
+      >
+        {body}
+      </Accordion>
+    );
+  } else if (isObject(editContent)) {
+    return (
+      <Accordion
+        head={`${prepend}{`}
+      >
+        {body}
+      </Accordion>
+    );
+  } else {
+    return body;
+  }
+}
 
+export type JsonEditorBodyProps = {
+  dispatch: React.Dispatch<Action>;
+  editContent: JSONValue;
+  path: JSONPath;
+  prepend: string;
+  append: string;
+  editingText: string | null;
+  setEditingText: React.Dispatch<React.SetStateAction<string | null>>;
+};
+function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
+  const { dispatch, editContent, path, prepend, append, editingText, setEditingText } = props;
   if (editingText != null) {
     let newValue: JSONValue | undefined = undefined;
     try {
@@ -48,9 +92,7 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
     );
   } else if (Array.isArray(editContent)) {
     return (
-      <Accordion
-        head={`${prepend}[`}
-      >
+      <>
         {
           editContent.map((value: JSONValue, i, list) => (
             <div
@@ -70,13 +112,11 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
         }
         ]
         {append}
-      </Accordion>
+      </>
     );
   } else if (isObject(editContent)) {
     return (
-      <Accordion
-        head={`${prepend}{`}
-      >
+      <>
         {
           Object.entries(editContent).map(([key, value], i, list) => (
             <div
@@ -96,7 +136,7 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
         }
         {"}"}
         {append}
-      </Accordion>
+      </>
     );
   } else {
     return (
