@@ -3,6 +3,8 @@ import './App.css';
 import { JsonEditor } from './JsonEditor';
 import { reduce, initialState, doImport } from './state';
 
+const empty = [] as const;
+
 function App() {
   const [state, dispatch] = useReducer(reduce, initialState);
   const savedataTextarea = useRef<HTMLTextAreaElement>(null);
@@ -53,7 +55,8 @@ function App() {
           <JsonEditor
             dispatch={dispatch}
             editContent={state.editContent}
-            path={[]}
+            path1={empty}
+            path2={"editContent"}
             prepend=""
             append=""
           />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { JSONValue, JSONPath, Action, edit } from './state';
@@ -8,12 +8,14 @@ import './JsonEditor.css';
 export type JsonEditorProps = {
   dispatch: React.Dispatch<Action>;
   editContent: JSONValue;
-  path: JSONPath;
+  path1: JSONPath;
+  path2: number | string;
   prepend: string;
   append: string;
 };
 export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
-  const { dispatch, editContent, path, prepend, append } = props;
+  const { dispatch, editContent, path1, path2, prepend, append } = props;
+  const path = useMemo(() => [...path1, path2], [path1, path2]);
   const [editingText, setEditingText] = useState<string | null>(null);
 
   if (editingText != null) {
@@ -58,7 +60,8 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
               <JsonEditor
                 dispatch={dispatch}
                 editContent={value}
-                path={[...path, i]}
+                path1={path}
+                path2={i}
                 prepend={`${JSON.stringify(i)}: `}
                 append={i + 1 === list.length ? "" : ","}
               />
@@ -83,7 +86,8 @@ export function JsonEditor(props: JsonEditorProps): React.ReactElement | null {
               <JsonEditor
                 dispatch={dispatch}
                 editContent={value}
-                path={[...path, key]}
+                path1={path}
+                path2={key}
                 prepend={`${JSON.stringify(key)}: `}
                 append={i + 1 === list.length ? "" : ","}
               />

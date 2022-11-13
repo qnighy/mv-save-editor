@@ -24,10 +24,12 @@ export type EditAction = {
   readonly newValue: JSONValue;
 };
 
-export type JSONValue = {
+export type JSONValue = JSONObject | JSONArray | string | number | boolean | null;
+export type JSONObject = {
   readonly [key: string]: JSONValue;
-} | readonly JSONValue[] | string | number | boolean | null;
-export type JSONPath = (string | number)[];
+};
+export type JSONArray = readonly JSONValue[];
+export type JSONPath = readonly (string | number)[];
 
 export function startImport(): StartImportAction {
   return { type: "IMPORT/START" };
@@ -86,11 +88,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
       break;
     case "EDIT":
       if ((state as any).editContent !== undefined) {
-        if (action.path.length === 0) {
-          (state as any).editContent = action.newValue;
-        } else {
-          applyEdit((state as any).editContent, action.path, action.newValue);
-        }
+        applyEdit(state as any, action.path, action.newValue);
       }
       break;
   }
