@@ -6,7 +6,8 @@ export type Action =
   | StartImportAction
   | FailImportAction
   | FinishImportAction
-  | EditAction;
+  | EditAction
+  | DiscardAction;
 export type StartImportAction = {
   readonly type: "IMPORT/START";
 };
@@ -22,6 +23,9 @@ export type EditAction = {
   readonly type: "EDIT";
   readonly path: readonly (number | string)[];
   readonly newValue: JSONValue;
+};
+export type DiscardAction = {
+  readonly type: "DISCARD";
 };
 
 export type JSONValue = JSONObject | JSONArray | string | number | boolean | null;
@@ -43,6 +47,9 @@ export function finishImport(content: JSONValue): FinishImportAction {
 export function edit(path: readonly (number | string)[], newValue: JSONValue): EditAction {
   return { type: "EDIT", path, newValue };
 }
+export function discard(): DiscardAction {
+  return { type: "DISCARD" };
+}
 
 export function doImport(dispatch: React.Dispatch<Action>, file: Blob | string) {
   const promise = (async () => {
@@ -58,6 +65,10 @@ export function doImport(dispatch: React.Dispatch<Action>, file: Blob | string) 
   promise.catch((e) => {
     dispatch(failImport(`${e}`))
   });
+}
+
+export function getResult(content: JSONValue): string {
+  return LZString.compressToBase64(JSON.stringify(content));
 }
 
 export type State = {
@@ -90,6 +101,11 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
       if ((state as any).editContent !== undefined) {
         applyEdit(state as any, action.path, action.newValue);
       }
+      break;
+    case "DISCARD":
+      state.importing = false;
+      state.importError = undefined;
+      (state as any).editContent = undefined;
       break;
   }
 });

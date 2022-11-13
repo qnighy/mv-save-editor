@@ -1,13 +1,27 @@
-import React, { useReducer, useRef } from 'react';
+import React, { useMemo, useReducer, useRef } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import './App.css';
 import { JsonEditor } from './JsonEditor';
-import { reduce, initialState, doImport } from './state';
+import { reduce, initialState, doImport, discard, getResult } from './state';
+import { DownloadLink } from './DownloadLink';
 
 const empty = [] as const;
 
 function App() {
   const [state, dispatch] = useReducer(reduce, initialState);
   const savedataTextarea = useRef<HTMLTextAreaElement>(null);
+  const result = useMemo(() =>
+    state.editContent === undefined
+      ? undefined
+      : getResult(state.editContent)
+  , [state.editContent]);
+  const resultBlob = useMemo(() => {
+    if (result && Blob) {
+      return new Blob([result]);
+    }
+    return undefined;
+  }, [result]);
   return (
     <div className="App">
       <h1>Save Editor</h1>
@@ -52,14 +66,26 @@ function App() {
           </>
         )
         : (
-          <JsonEditor
-            dispatch={dispatch}
-            editContent={state.editContent}
-            path1={empty}
-            path2={"editContent"}
-            prepend=""
-            append=""
-          />
+          <>
+            <DownloadLink blob={resultBlob!} download="edit.rpgsave">
+              <FontAwesomeIcon icon={solid("cloud-arrow-down")} />
+              Download
+            </DownloadLink>
+            <button
+              onClick={() => dispatch(discard())}
+            >
+              <FontAwesomeIcon icon={solid("trash")} />
+              Discard
+            </button>
+            <JsonEditor
+              dispatch={dispatch}
+              editContent={state.editContent}
+              path1={empty}
+              path2={"editContent"}
+              prepend=""
+              append=""
+            />
+          </>
         )
       }
     </div>
