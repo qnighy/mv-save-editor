@@ -68,6 +68,12 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
       newValue = JSON.parse(editingText);
     } catch {}
     const hasError = newValue === undefined;
+    const applyChange = () => {
+      if (newValue !== undefined) {
+        setEditingText(null);
+        dispatch(edit(path, newValue))
+      }
+    };
     return (
       <div className="editor-line">
         {prepend}
@@ -78,15 +84,24 @@ function JsonEditorBody(props: JsonEditorBodyProps): React.ReactElement | null {
           onInput={(e) => setEditingText(e.currentTarget.value)}
           onChange={(e) => setEditingText(e.currentTarget.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && newValue !== undefined) {
-              setEditingText(null);
-              dispatch(edit(path, newValue))
+            if (e.key === "Enter") {
+              applyChange();
             }
           }}
         />
         {append}
-        <button className="editor-tool">
-          <FontAwesomeIcon icon={solid("pencil")} />
+        <button
+          className="editor-tool"
+          onClick={applyChange}
+        >
+          <FontAwesomeIcon icon={solid("check")} />
+        </button>
+        <button
+          onClick={() => {
+            setEditingText(null);
+          }}
+        >
+          <FontAwesomeIcon icon={solid("times")} />
         </button>
       </div>
     );
