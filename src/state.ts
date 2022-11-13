@@ -1,5 +1,5 @@
 import React from "react";
-import produce from "immer";
+import produce, { Draft } from "immer";
 import LZString from "lz-string";
 
 export type Action = StartImportAction | FailImportAction | FinishImportAction;
@@ -18,6 +18,7 @@ export type FinishImportAction = {
 export type JSONValue = {
   readonly [key: string]: JSONValue;
 } | readonly JSONValue[] | string | number | boolean | null;
+export type JSONPath = (string | number)[];
 
 export function startImport(): StartImportAction {
   return { type: "IMPORT/START" };
@@ -48,6 +49,7 @@ export function doImport(dispatch: React.Dispatch<Action>, file: Blob | string) 
 export type State = {
   readonly importing: boolean;
   readonly importError?: string | undefined;
+  readonly editContent?: JSONValue | undefined;
 };
 
 export const initialState: State = {
@@ -59,6 +61,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
     case "IMPORT/START":
       state.importing = true;
       state.importError = undefined;
+      (state as any).editContent = undefined;
       break;
     case "IMPORT/FAIL":
       state.importing = false;
@@ -67,6 +70,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
     case "IMPORT/FINISH":
       state.importing = false;
       state.importError = undefined;
+      (state as any).editContent = action.content;
       break;
   }
 });
