@@ -20,6 +20,7 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
   const path = useMemo(() => [...path1, path2], [path1, path2]);
   const [editingText, setEditingText] = useState<string | null>(null);
   const { expanded, expanderProps, regionProps } = useAccordion();
+  const startEditing = () => setEditingText(JSON.stringify(editContent));
   if (editingText != null) {
     let newValue: JSONValue | undefined = undefined;
     try {
@@ -73,10 +74,21 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
   } else if (Array.isArray(editContent)) {
     return (
       <div>
-        <button className="accordion-expander" {...expanderProps}>
-          <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
-          {prepend}{"["}
-        </button>
+        <div className="editor-line">
+          <button className="accordion-expander" {...expanderProps}>
+            <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
+            {prepend}{"["}
+          </button>
+          <button
+            className="editor-tool"
+            onClick={startEditing}
+          >
+            <FontAwesomeIcon
+              title="Edit this property"
+              icon={solid("pencil")}
+            />
+          </button>
+        </div>
         <DivFix {...regionProps}>
           {
             editContent.map((value: JSONValue, i, list) => (
@@ -103,10 +115,21 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
   } else if (isObject(editContent)) {
     return (
       <div>
-        <button className="accordion-expander" {...expanderProps}>
-          <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
-          {prepend}{"{"}
-        </button>
+        <div className="editor-line">
+          <button className="accordion-expander" {...expanderProps}>
+            <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
+            {prepend}{"{"}
+          </button>
+          <button
+            className="editor-tool"
+            onClick={startEditing}
+          >
+            <FontAwesomeIcon
+              title="Edit this property"
+              icon={solid("pencil")}
+            />
+          </button>
+        </div>
         <DivFix {...regionProps}>
           {
             Object.entries(editContent).map(([key, value], i, list) => (
@@ -131,7 +154,6 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
       </div>
     );
   } else {
-    const startEditing = () => setEditingText(JSON.stringify(editContent));
     return (
       <div className="editor-line">
         <span
