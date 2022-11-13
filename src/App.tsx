@@ -50,7 +50,11 @@ function App() {
           </>
         )
         : (
-          <JsonEditor editContent={state.editContent} path={[]} />
+          <JsonEditor
+            prepend=""
+            editContent={state.editContent}
+            path={[]}
+          />
         )
       }
     </div>
