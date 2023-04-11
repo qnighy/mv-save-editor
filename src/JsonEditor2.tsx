@@ -53,7 +53,7 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
                   nextSegment={i}
                   value={elem}
                   setValue={setValue}
-                  prepend={null}
+                  prepend={<span className={arrayIndex}>{`${i}: `}</span>}
                   append={i + 1 === a.length ? "" : ","}
                 />
               </React.Fragment>
@@ -153,6 +153,12 @@ const accordion = css`
 const indentBlock = css`
   padding-left: 1em;
   border-left: 1px solid #cccccc;
+`;
+
+const arrayIndex = css`
+  color: gray;
+  font-size: 70%;
+  user-select: none;
 `;
 
 function asRecord(obj: object): Record<string, unknown> {
