@@ -4,10 +4,10 @@
   "private": true,
   "packageManager": "yarn@3.5.0",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
@@ -16,6 +16,8 @@
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@linaria/core": "^4.2.8",
+    "@linaria/react": "^4.3.6",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
@@ -32,6 +34,9 @@
     "web-vitals": "^3.3.1"
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@linaria/babel-preset": "^4.4.3",
+    "@linaria/webpack-loader": "^4.1.15",
     "@storybook/addon-essentials": "^7.0.2",
     "@storybook/addon-interactions": "^7.0.2",
     "@storybook/addon-links": "^7.0.2",

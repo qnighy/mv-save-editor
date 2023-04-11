@@ -1,3 +1,4 @@
+import { css } from "@linaria/core";
 import React, { useCallback, useMemo } from "react";
 
 export type JsonEditor2Props = {
@@ -52,7 +53,9 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
     const record = asRecord(value);
     return (
       <>
+        <span className={test}>
         {"{"}
+        </span>
         {
           Object.entries(record).map(([key, value], i, a) => (
             <React.Fragment key={key}>
@@ -112,6 +115,10 @@ function updatePath(path: Path, prevValue: unknown, updater: (prevValue: unknown
   }
   return current;
 }
+
+const test = css`
+  color: red;
+`;
 
 function asRecord(obj: object): Record<string, unknown> {
   return obj as Record<string, unknown>;

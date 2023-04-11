@@ -15,5 +15,19 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
   staticDirs: ["../public"],
+  babel: async (options) => ({
+    ...options,
+    presets: [...options.presets ?? [], "@linaria"],
+  }),
+  webpackFinal: async (config, { configType }) => {
+    config.module!.rules!.push({
+      test: /\.([jt]sx?|[mc][jt]s)$/,
+      loader: '@linaria/webpack-loader',
+      options: {
+        sourceMap: configType !== 'PRODUCTION',
+      },
+    });
+    return config;
+  },
 };
 export default config;
