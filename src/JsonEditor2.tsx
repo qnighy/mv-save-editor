@@ -36,8 +36,11 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
     return <span>{JSON.stringify(value)}</span>;
   } else if (Array.isArray(value)) {
     return (
-      <>
-        [
+      <details className={accordion}>
+        <summary>
+          [
+          <span className={summaryPlaceholder}>{"...]"}</span>
+        </summary>
         {
           value.map((elem, i, a) => (
             <React.Fragment key={i}>
@@ -47,15 +50,16 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
           ))
         }
         ]
-      </>
+      </details>
     );
   } else if (typeof value === "object" && value != null) {
     const record = asRecord(value);
     return (
-      <>
-        <span className={test}>
-        {"{"}
-        </span>
+      <details className={accordion}>
+        <summary>
+          {"{"}
+          <span className={summaryPlaceholder}>{"...}"}</span>
+        </summary>
         {
           Object.entries(record).map(([key, value], i, a) => (
             <React.Fragment key={key}>
@@ -65,7 +69,7 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
           ))
         }
         {"}"}
-      </>
+      </details>
     );
   }
   return null;
@@ -116,8 +120,12 @@ function updatePath(path: Path, prevValue: unknown, updater: (prevValue: unknown
   return current;
 }
 
-const test = css`
-  color: red;
+const summaryPlaceholder = css``;
+
+const accordion = css`
+  &[open] > summary .${summaryPlaceholder} {
+    display: none;
+  }
 `;
 
 function asRecord(obj: object): Record<string, unknown> {
