@@ -12,7 +12,7 @@ export const JsonEditor2: React.FC<JsonEditor2Props> = (props) => {
   const setPartValue = useCallback((path: Path, updater: (prevValue: unknown) => unknown) => {
     setValue((prevValue) => updatePath(path, prevValue, updater));
   }, [setValue]);
-  return <JsonPartEditor path={emptyPath} value={value} setValue={setPartValue} />;
+  return <JsonPartEditor path={emptyPath} value={value} setValue={setPartValue} prepend={null} append={null} />;
 }
 
 type Segment = string | number;
@@ -21,35 +21,47 @@ type JsonPartEditorProps = {
   path: Path;
   value: unknown;
   setValue: (path: Path, updater: (prevValue: unknown) => unknown) => void;
+  prepend: React.ReactNode;
+  append: React.ReactNode;
 };
 
 const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
-  const { path, value, setValue } = props;
+  const { path, value, setValue, prepend, append } = props;
 
   if (typeof value === "string") {
-    return <span>{JSON.stringify(value)}</span>;
+    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (typeof value === "number") {
-    return <span>{JSON.stringify(value)}</span>;
+    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (typeof value === "boolean") {
-    return <span>{JSON.stringify(value)}</span>;
+    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (value == null) {
-    return <span>{JSON.stringify(value)}</span>;
+    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (Array.isArray(value)) {
     return (
       <details className={accordion}>
         <summary>
+          {prepend}
           [
-          <span className={summaryPlaceholder}>{"...]"}</span>
+          <span className={summaryPlaceholder}>{"...]"}{append}</span>
         </summary>
-        {
-          value.map((elem, i, a) => (
-            <React.Fragment key={i}>
-              <JsonChildEditor parentPath={path} nextSegment={i} value={elem} setValue={setValue} />
-              {i + 1 === a.length ? "" : ","}
-            </React.Fragment>
-          ))
-        }
+        <div className={indentBlock}>
+          {
+            value.map((elem, i, a) => (
+              <React.Fragment key={i}>
+                <JsonChildEditor
+                  parentPath={path}
+                  nextSegment={i}
+                  value={elem}
+                  setValue={setValue}
+                  prepend={null}
+                  append={i + 1 === a.length ? "" : ","}
+                />
+              </React.Fragment>
+            ))
+          }
+        </div>
         ]
+        {append}
       </details>
     );
   } else if (typeof value === "object" && value != null) {
@@ -57,18 +69,28 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
     return (
       <details className={accordion}>
         <summary>
+          {prepend}
           {"{"}
-          <span className={summaryPlaceholder}>{"...}"}</span>
+          <span className={summaryPlaceholder}>{"...}"}{append}</span>
         </summary>
-        {
-          Object.entries(record).map(([key, value], i, a) => (
-            <React.Fragment key={key}>
-              {JSON.stringify(key)}: <JsonChildEditor parentPath={path} nextSegment={key} value={value} setValue={setValue} />
-              {i + 1 === a.length ? "" : ","}
-            </React.Fragment>
-          ))
-        }
+        <div className={indentBlock}>
+          {
+            Object.entries(record).map(([key, value], i, a) => (
+              <React.Fragment key={key}>
+                <JsonChildEditor
+                  parentPath={path}
+                  nextSegment={key}
+                  value={value}
+                  setValue={setValue}
+                  prepend={`${JSON.stringify(key)}: `}
+                  append={i + 1 === a.length ? "" : ","}
+                />
+              </React.Fragment>
+            ))
+          }
+        </div>
         {"}"}
+        {append}
       </details>
     );
   }
@@ -126,6 +148,11 @@ const accordion = css`
   &[open] > summary .${summaryPlaceholder} {
     display: none;
   }
+`;
+
+const indentBlock = css`
+  padding-left: 1em;
+  border-left: 1px solid #cccccc;
 `;
 
 function asRecord(obj: object): Record<string, unknown> {
