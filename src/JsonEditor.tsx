@@ -2,9 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import { JSONValue, JSONPath, Action, edit } from './state';
-import { useAccordion } from './useAccordion';
 import './JsonEditor.css';
-import { DivFix } from './DivFix';
 
 export type JsonEditorProps = {
   dispatch: React.Dispatch<Action>;
@@ -19,7 +17,6 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
   const { dispatch, editContent, path1, path2, prepend, append } = props;
   const path = useMemo(() => [...path1, path2], [path1, path2]);
   const [editingText, setEditingText] = useState<string | null>(null);
-  const { expanded, expanderProps, regionProps } = useAccordion();
   const startEditing = () => setEditingText(JSON.stringify(editContent));
   if (editingText != null) {
     let newValue: JSONValue | undefined = undefined;
@@ -73,12 +70,13 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
     );
   } else if (Array.isArray(editContent)) {
     return (
-      <div>
-        <div className="editor-line">
-          <button className="accordion-expander" {...expanderProps}>
-            <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
+      <details className="accordion">
+        <summary className="editor-line">
+          <div className="accordion-expander">
+            <FontAwesomeIcon className="accordion-expanded" icon={solid("chevron-down")} />
+            <FontAwesomeIcon className="accordion-folded" icon={solid("chevron-right")} />
             {prepend}{"["}
-          </button>
+          </div>
           <button
             className="editor-tool"
             onClick={startEditing}
@@ -88,8 +86,8 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
               icon={solid("pencil")}
             />
           </button>
-        </div>
-        <DivFix {...regionProps}>
+        </summary>
+        <div>
           {
             editContent.map((value: JSONValue, i, list) => (
               <div
@@ -109,17 +107,18 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
           }
           ]
           {append}
-        </DivFix>
-      </div>
+        </div>
+      </details>
     );
   } else if (isObject(editContent)) {
     return (
-      <div>
-        <div className="editor-line">
-          <button className="accordion-expander" {...expanderProps}>
-            <FontAwesomeIcon icon={expanded ? solid("chevron-down") : solid("chevron-right")} />
+      <details className="accordion">
+        <summary className="editor-line">
+          <div className="accordion-expander">
+            <FontAwesomeIcon className="accordion-expanded" icon={solid("chevron-down")} />
+            <FontAwesomeIcon className="accordion-folded" icon={solid("chevron-right")} />
             {prepend}{"{"}
-          </button>
+          </div>
           <button
             className="editor-tool"
             onClick={startEditing}
@@ -129,8 +128,8 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
               icon={solid("pencil")}
             />
           </button>
-        </div>
-        <DivFix {...regionProps}>
+        </summary >
+        <div>
           {
             Object.entries(editContent).map(([key, value], i, list) => (
               <div
@@ -150,8 +149,8 @@ export function JsonEditorWorker(props: JsonEditorProps): React.ReactElement | n
           }
           {"}"}
           {append}
-        </DivFix>
-      </div>
+        </div>
+      </details>
     );
   } else {
     return (

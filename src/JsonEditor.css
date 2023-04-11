@@ -1,10 +1,19 @@
-button.accordion-expander {
+.accordion-expander {
   all: inherit;
   cursor: pointer;
   padding: 0;
 }
-button.accordion-expander:focus-visible {
+.accordion-expander:focus-visible {
   outline: 1px solid blue;
+}
+.accordion-expander:focus-visible {
+  outline: 1px solid blue;
+}
+details.accordion[open] > summary .accordion-folded {
+  display: none;
+}
+details.accordion:not([open]) > summary .accordion-expanded {
+  display: none;
 }
 
 .json-indent {
