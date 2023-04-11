@@ -1704,37 +1704,37 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-common-types@npm:6.2.0":
-  version: 6.2.0
-  resolution: "@fortawesome/fontawesome-common-types@npm:6.2.0"
-  checksum: 1d0a3340dc2d2798609195cf77f1b0db98f0d87144044eb7cd3d78745baac8509705c6ebc7cce3d9bb36c7d7358ca064f77f39d86478ab1e7aa7aadc344cfd91
+"@fortawesome/fontawesome-common-types@npm:6.4.0":
+  version: 6.4.0
+  resolution: "@fortawesome/fontawesome-common-types@npm:6.4.0"
+  checksum: a9b79136caa615352bd921cfe2710516321b402cd76c3f0ae68e579a7e3d7645c5a5c0ecd7516c0b207adeeffd1d2174978638d8c0d3c8c937d66fca4f2ff556
   languageName: node
   linkType: hard
 
-"@fortawesome/fontawesome-svg-core@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@fortawesome/fontawesome-svg-core@npm:6.2.0"
+"@fortawesome/fontawesome-svg-core@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@fortawesome/fontawesome-svg-core@npm:6.4.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": 6.2.0
-  checksum: 3bae680cba4098bc3a6aee04e655e0c6b6bab2d78e6709dc0a44d106f57a09bc2fd979310108777a373df301273a2a276739056f8984cd8bc5a50d37338c5380
+    "@fortawesome/fontawesome-common-types": 6.4.0
+  checksum: 5d4e6c15f814f5ce29053b666d0c7d194dc8ba173d128a38cc5856403a09d4e817e54956d30ed8d48d621f2f5ebcc71756f4e8fe5c5a091c636fc728fcb2362b
   languageName: node
   linkType: hard
 
-"@fortawesome/free-regular-svg-icons@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@fortawesome/free-regular-svg-icons@npm:6.2.0"
+"@fortawesome/free-regular-svg-icons@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@fortawesome/free-regular-svg-icons@npm:6.4.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": 6.2.0
-  checksum: 1b68a25590b273653c7adfa18bd6ef0ee533710687a46ef21c7b5395deae280a2faaff0b024717d9e54fdaedb8165769f281342704821777f86316223d5264ba
+    "@fortawesome/fontawesome-common-types": 6.4.0
+  checksum: a52689349b858a73b179532a207f98d9ee0f28b31e22eaffa6ce23cf3bfec8cc52bcd35770a0943a2dd1328bafbfdea6809231abee7a8601796bc0fb9759d25f
   languageName: node
   linkType: hard
 
-"@fortawesome/free-solid-svg-icons@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "@fortawesome/free-solid-svg-icons@npm:6.2.0"
+"@fortawesome/free-solid-svg-icons@npm:^6.4.0":
+  version: 6.4.0
+  resolution: "@fortawesome/free-solid-svg-icons@npm:6.4.0"
   dependencies:
-    "@fortawesome/fontawesome-common-types": 6.2.0
-  checksum: b5edf24be491e8493028b7fd2158fb73f3a76491087970609c0ef6a4449fd4744312fe768bfcffc90a5ef86b9980f9ab8ebb36927ba8d9854c2fa638ceadb0ac
+    "@fortawesome/fontawesome-common-types": 6.4.0
+  checksum: efdd1688620be3d52aacaeac36c955571962e174ae981fc697b6e92fb0996b00166d02e7729a59ea93713a514e2c8d564ab1aa79c9653b4cfed0263e4874d070
   languageName: node
   linkType: hard
 
@@ -2481,23 +2481,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/dom@npm:^8.5.0":
-  version: 8.19.0
-  resolution: "@testing-library/dom@npm:8.19.0"
+"@testing-library/dom@npm:^9.0.0":
+  version: 9.2.0
+  resolution: "@testing-library/dom@npm:9.2.0"
   dependencies:
     "@babel/code-frame": ^7.10.4
     "@babel/runtime": ^7.12.5
-    "@types/aria-query": ^4.2.0
+    "@types/aria-query": ^5.0.1
     aria-query: ^5.0.0
     chalk: ^4.1.0
     dom-accessibility-api: ^0.5.9
-    lz-string: ^1.4.4
+    lz-string: ^1.5.0
     pretty-format: ^27.0.2
-  checksum: 6bb93fef96703b6c47cf1b7cc8f71d402a9576084a94ba4e9926f51bd7bb1287fbb4f6942d82bd03fc6f3d998ae97e60f6aea4618f3a1ce6139597d2a4ecb7b9
+  checksum: b145f43cd06ff083012cf2503aff6ccba97ff80715fcb106fe64af690f5536557bf24d37b97e8d685bbe3803d7f71d685ce71426cb1b9e250c3611e4372dcfa9
   languageName: node
   linkType: hard
 
-"@testing-library/jest-dom@npm:^5.14.1":
+"@testing-library/jest-dom@npm:^5.16.5":
   version: 5.16.5
   resolution: "@testing-library/jest-dom@npm:5.16.5"
   dependencies:
@@ -2514,28 +2514,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/react@npm:^13.0.0":
-  version: 13.4.0
-  resolution: "@testing-library/react@npm:13.4.0"
+"@testing-library/react@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@testing-library/react@npm:14.0.0"
   dependencies:
     "@babel/runtime": ^7.12.5
-    "@testing-library/dom": ^8.5.0
+    "@testing-library/dom": ^9.0.0
     "@types/react-dom": ^18.0.0
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 51ec548c1fdb1271089a5c63e0908f0166f2c7fcd9cacd3108ebbe0ce64cb4351812d885892020dc37608418cfb15698514856502b3cab0e5cc58d6cc1bd4a3e
+  checksum: 4a54c8f56cc4a39b50803205f84f06280bb76521d6d5d4b3b36651d760c7c7752ef142d857d52aaf4fad4848ed7a8be49afc793a5dda105955d2f8bef24901ac
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^13.2.1":
-  version: 13.5.0
-  resolution: "@testing-library/user-event@npm:13.5.0"
-  dependencies:
-    "@babel/runtime": ^7.12.5
+"@testing-library/user-event@npm:^14.4.3":
+  version: 14.4.3
+  resolution: "@testing-library/user-event@npm:14.4.3"
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
-  checksum: 16319de685fbb7008f1ba667928f458b2d08196918002daca56996de80ef35e6d9de26e9e1ece7d00a004692b95a597cf9142fff0dc53f2f51606a776584f549
+  checksum: 852c48ea6db1c9471b18276617c84fec4320771e466cd58339a732ca3fd73ad35e5a43ae14f51af51a8d0a150dcf60fcaab049ef367871207bea8f92c4b8195e
   languageName: node
   linkType: hard
 
@@ -2560,10 +2558,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/aria-query@npm:^4.2.0":
-  version: 4.2.2
-  resolution: "@types/aria-query@npm:4.2.2"
-  checksum: 6f2ce11d91e2d665f3873258db19da752d91d85d3679eb5efcdf9c711d14492287e1e4eb52613b28e60375841a9e428594e745b68436c963d8bad4bf72188df3
+"@types/aria-query@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "@types/aria-query@npm:5.0.1"
+  checksum: 69fd7cceb6113ed370591aef04b3fd0742e9a1b06dd045c43531448847b85de181495e4566f98e776b37c422a12fd71866e0a1dfd904c5ec3f84d271682901de
   languageName: node
   linkType: hard
 
@@ -2794,10 +2792,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lz-string@npm:^1.3.34":
-  version: 1.3.34
-  resolution: "@types/lz-string@npm:1.3.34"
-  checksum: e5c5ec0b9b9bfb0a64ca883152ce753244f53a6f12d8d3ba1a363262bea07fed1cd04c399a33a5d600a665d15a39a58bf5fd1ad9c52a98bccf7511f7a42e82f7
+"@types/lz-string@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "@types/lz-string@npm:1.5.0"
+  dependencies:
+    lz-string: "*"
+  checksum: 3a66789e8eac4110265cbbb66610119587bbfb6f5c51ea387ffab8b2a110669a202cee8e596d48f00ff867d9794837d5046e195ac1c3bc6c07b491e7e9050526
   languageName: node
   linkType: hard
 
@@ -2815,10 +2815,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^16.7.13":
-  version: 16.18.3
-  resolution: "@types/node@npm:16.18.3"
-  checksum: 6b8ba2ea5d842f7986e366cb9184c54d273d492784dc62e08fd5afeae938d9b61aec6e4222d2541cd18f9b1412ba361bbcb3f4204fb003608af80a2a6af959f9
+"@types/node@npm:^18.15.11":
+  version: 18.15.11
+  resolution: "@types/node@npm:18.15.11"
+  checksum: 977b4ad04708897ff0eb049ecf82246d210939c82461922d20f7d2dcfd81bbc661582ba3af28869210f7e8b1934529dcd46bff7d448551400f9d48b9d3bddec3
   languageName: node
   linkType: hard
 
@@ -2873,7 +2873,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.0.0":
+"@types/react-dom@npm:^18.0.11":
+  version: 18.0.11
+  resolution: "@types/react-dom@npm:18.0.11"
+  dependencies:
+    "@types/react": "*"
+  checksum: 579691e4d5ec09688087568037c35edf8cfb1ab3e07f6c60029280733ee7b5c06d66df6fcc90786702c93ac8cb13bc7ff16c79ddfc75d082938fbaa36e1cdbf4
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:*":
   version: 18.0.25
   resolution: "@types/react@npm:18.0.25"
   dependencies:
@@ -2881,6 +2890,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 231d658c45abdef044a716b4502774f1585d8336d73b2f5bd68f181acbfc874b7a457686ecd29b415b43ed0922c309bab7e2cf96832d188a3f4f1b02f2af760a
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.0.34":
+  version: 18.0.34
+  resolution: "@types/react@npm:18.0.34"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: 60d2766e7644ec480075bbb154bf8fb8476089466b643662ef59964e27cae2d8c71fd9c717a4dfa9627c3e050fa2ae866d10d16f66b4509058d1bfe2a564b18c
   languageName: node
   linkType: hard
 
@@ -6340,7 +6360,7 @@ __metadata:
 
 "fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -6923,7 +6943,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"immer@npm:^9.0.16, immer@npm:^9.0.7":
+"immer@npm:^9.0.21":
+  version: 9.0.21
+  resolution: "immer@npm:9.0.21"
+  checksum: 70e3c274165995352f6936695f0ef4723c52c92c92dd0e9afdfe008175af39fa28e76aafb3a2ca9d57d1fb8f796efc4dd1e1cc36f18d33fa5b74f3dfb0375432
+  languageName: node
+  linkType: hard
+
+"immer@npm:^9.0.7":
   version: 9.0.16
   resolution: "immer@npm:9.0.16"
   checksum: e9a5ca65c929b329da7a3b7beccf7984271cda7bdd47b2cab619eac3277dcd56598c211b55cc340786b6eff0c06652ac018808d9fd744443f06882364dece6bc
@@ -8457,12 +8484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lz-string@npm:^1.4.4":
-  version: 1.4.4
-  resolution: "lz-string@npm:1.4.4"
+"lz-string@npm:*, lz-string@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "lz-string@npm:1.5.0"
   bin:
     lz-string: bin/bin.js
-  checksum: 54e31238a61a84d8f664d9860a9fba7310c5b97a52c444f80543069bc084815eff40b8d4474ae1d93992fdf6c252dca37cf27f6adbeb4dbc3df2f3ac773d0e61
+  checksum: 1ee98b4580246fd90dd54da6e346fb1caefcf05f677c686d9af237a157fdea3fd7c83a4bc58f858cd5b10a34d27afe0fdcbd0505a47e0590726a873dc8b8f65d
   languageName: node
   linkType: hard
 
@@ -8794,25 +8821,25 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mv-save-editor@workspace:."
   dependencies:
-    "@fortawesome/fontawesome-svg-core": ^6.2.0
-    "@fortawesome/free-regular-svg-icons": ^6.2.0
-    "@fortawesome/free-solid-svg-icons": ^6.2.0
+    "@fortawesome/fontawesome-svg-core": ^6.4.0
+    "@fortawesome/free-regular-svg-icons": ^6.4.0
+    "@fortawesome/free-solid-svg-icons": ^6.4.0
     "@fortawesome/react-fontawesome": ^0.2.0
-    "@testing-library/jest-dom": ^5.14.1
-    "@testing-library/react": ^13.0.0
-    "@testing-library/user-event": ^13.2.1
+    "@testing-library/jest-dom": ^5.16.5
+    "@testing-library/react": ^14.0.0
+    "@testing-library/user-event": ^14.4.3
     "@types/jest": ^27.0.1
-    "@types/lz-string": ^1.3.34
-    "@types/node": ^16.7.13
-    "@types/react": ^18.0.0
-    "@types/react-dom": ^18.0.0
-    immer: ^9.0.16
-    lz-string: ^1.4.4
+    "@types/lz-string": ^1.5.0
+    "@types/node": ^18.15.11
+    "@types/react": ^18.0.34
+    "@types/react-dom": ^18.0.11
+    immer: ^9.0.21
+    lz-string: ^1.5.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-scripts: 5.0.1
-    typescript: ^4.4.2
-    web-vitals: ^2.1.0
+    typescript: ^5.0.4
+    web-vitals: ^3.3.1
   languageName: unknown
   linkType: soft
 
@@ -10899,7 +10926,7 @@ __metadata:
 
 "resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
   version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -10912,7 +10939,7 @@ __metadata:
 
 "resolve@patch:resolve@^2.0.0-next.3#~builtin<compat/resolve>":
   version: 2.0.0-next.4
-  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -12113,23 +12140,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.4.2":
-  version: 4.8.4
-  resolution: "typescript@npm:4.8.4"
+"typescript@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "typescript@npm:5.0.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3e4f061658e0c8f36c820802fa809e0fd812b85687a9a2f5430bc3d0368e37d1c9605c3ce9b39df9a05af2ece67b1d844f9f6ea8ff42819f13bcb80f85629af0
+  checksum: 82b94da3f4604a8946da585f7d6c3025fff8410779e5bde2855ab130d05e4fd08938b9e593b6ebed165bda6ad9292b230984f10952cf82f0a0ca07bbeaa08172
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>":
-  version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=701156"
+"typescript@patch:typescript@^5.0.4#~builtin<compat/typescript>":
+  version: 5.0.4
+  resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=85af82"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 301459fc3eb3b1a38fe91bf96d98eb55da88a9cb17b4ef80b4d105d620f4d547ba776cc27b44cc2ef58b66eda23fe0a74142feb5e79a6fb99f54fc018a696afa
+  checksum: bb309d320c59a26565fb3793dba550576ab861018ff3fd1b7fccabbe46ae4a35546bc45f342c0a0b6f265c801ccdf64ffd68f548f117ceb7f0eac4b805cd52a9
   languageName: node
   linkType: hard
 
@@ -12377,10 +12404,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-vitals@npm:^2.1.0":
-  version: 2.1.4
-  resolution: "web-vitals@npm:2.1.4"
-  checksum: 03d3f47dbf55c3dce07beb0ff5de8ddd52e2d0a53a8df5c84e7a16dda93543341d67231fa79b1d9772b091419af4ec0fd395b8bcf451a0e26846e3f76b3d0efc
+"web-vitals@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "web-vitals@npm:3.3.1"
+  checksum: ff417dec2d77f57bc5130767f47aad6f93173e5d0e24a179082c7dca423850106ba1d66c737f91400a6bed6585a7295531d9e54354d1cb31d1a3e68596bb2000
   languageName: node
   linkType: hard
 
