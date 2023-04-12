@@ -1,5 +1,7 @@
 import { css } from "@linaria/core";
 import React, { useCallback, useMemo } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
 export type JsonEditor2Props = {
   value: unknown;
@@ -28,13 +30,15 @@ type JsonPartEditorProps = {
 const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
   const { path, value, setValue, prepend, append } = props;
 
+  const setValueHere = useCallback((updater: (prevValue: unknown) => unknown) => setValue(path, updater), [setValue, path]);
+
   if (typeof value === "string") {
-    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
+    return <StringEditor value={value} setValue={setValueHere} prepend={prepend} append={append} />;
   } else if (typeof value === "number") {
-    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
+    return <div className={editorLine}>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (typeof value === "boolean") {
     return (
-      <div>
+      <div className={editorLine}>
         {prepend}
         <label>
           <input type="checkbox" checked={value} onChange={(e) => {
@@ -47,7 +51,7 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
       </div>
     );
   } else if (value == null) {
-    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
+    return <div className={editorLine}>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (Array.isArray(value)) {
     return (
       <details className={accordion}>
@@ -154,6 +158,27 @@ function updatePath(path: Path, prevValue: unknown, updater: (prevValue: unknown
   return current;
 }
 
+type StringEditorProps = {
+  value: string;
+  setValue: (updater: (prevValue: unknown) => unknown) => void;
+  prepend: React.ReactNode;
+  append: React.ReactNode;
+};
+
+const StringEditor: React.FC<StringEditorProps> = (props) => {
+  const { value, setValue, prepend, append } = props;
+  return (
+    <div className={editorLine}>
+      {prepend}
+      {JSON.stringify(value)}
+      {append}
+      <button className={editorButton}>
+        <FontAwesomeIcon icon={solid("pen")} />
+      </button>
+    </div>
+  );
+};
+
 const summaryPlaceholder = css``;
 
 const accordion = css`
@@ -172,6 +197,35 @@ const arrayIndex = css`
   font-size: 70%;
   user-select: none;
 `;
+
+const editorLine = css`
+  &:hover {
+    background-color: #f0f0f0;
+  }
+`;
+
+const editorButton = css`
+  background: none;
+  margin: 0 1em;
+  &:active {
+    background-color: #cccccc;
+  }
+  .${editorLine} & {
+    border: 1px solid #d0d0d0;
+    color: #d0d0d0;
+  }
+  .${editorLine}:hover & {
+    border: 1px solid #606060;
+    color: #606060;
+  }
+  .${editorLine}:hover &:hover {
+    border: 1px solid black;
+    color: black;
+  }
+`;
+
+
+const stringEditor = css``;
 
 function asRecord(obj: object): Record<string, unknown> {
   return obj as Record<string, unknown>;
