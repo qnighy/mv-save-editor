@@ -27,8 +27,15 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     defaultValue: {
-      foo: 42,
-      bar: [1, 2, 3],
+      stringValue: "foobar",
+      numericValue: 42,
+      arrayValue: [1, 2, 3],
+      booleanValue: true,
+      nullValue: null,
+      nestedObject: {
+        foo: 42,
+        bar: 100,
+      },
     },
   },
 };

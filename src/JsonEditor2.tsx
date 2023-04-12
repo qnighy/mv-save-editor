@@ -33,7 +33,17 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
   } else if (typeof value === "number") {
     return <div>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (typeof value === "boolean") {
-    return <div>{prepend}{JSON.stringify(value)}{append}</div>;
+    return (
+      <div>
+        {prepend}
+        <input type="checkbox" checked={value} onChange={(e) => {
+          const newValue = e.currentTarget.checked;
+          setValue(path, () => newValue);
+        }} />
+        {JSON.stringify(value)}
+        {append}
+      </div>
+    );
   } else if (value == null) {
     return <div>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (Array.isArray(value)) {
@@ -136,7 +146,7 @@ function updatePath(path: Path, prevValue: unknown, updater: (prevValue: unknown
       newArray[key] = current;
       current = newArray;
     } else {
-      current = { ...prevPart, key: current };
+      current = { ...prevPart, [key]: current };
     }
   }
   return current;
