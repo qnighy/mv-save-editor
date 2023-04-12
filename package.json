@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
+    "@jest/globals": "^29.5.0",
     "@linaria/babel-preset": "^4.4.3",
     "@linaria/webpack-loader": "^4.1.15",
     "@storybook/addon-essentials": "^7.0.2",
@@ -45,6 +46,8 @@
     "@storybook/react": "^7.0.2",
     "@storybook/react-webpack5": "^7.0.2",
     "@storybook/testing-library": "^0.0.14-next.2",
+    "@storybook/testing-react": "^2.0.0",
+    "@testing-library/dom": "^9.2.0",
     "@types/lz-string": "^1.5.0",
     "@typescript-eslint/parser": "^5.58.0",
     "babel-plugin-named-exports-order": "^0.0.2",

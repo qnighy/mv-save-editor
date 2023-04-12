@@ -36,11 +36,13 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
     return (
       <div>
         {prepend}
-        <input type="checkbox" checked={value} onChange={(e) => {
-          const newValue = e.currentTarget.checked;
-          setValue(path, () => newValue);
-        }} />
-        {JSON.stringify(value)}
+        <label>
+          <input type="checkbox" checked={value} onChange={(e) => {
+            const newValue = e.currentTarget.checked;
+            setValue(path, () => newValue);
+          }} />
+          {JSON.stringify(value)}
+        </label>
         {append}
       </div>
     );
