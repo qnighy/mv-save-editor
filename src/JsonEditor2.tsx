@@ -1,5 +1,5 @@
 import { css } from "@linaria/core";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
@@ -167,14 +167,53 @@ type StringEditorProps = {
 
 const StringEditor: React.FC<StringEditorProps> = (props) => {
   const { value, setValue, prepend, append } = props;
+  const textSizingDummyElem = useRef<HTMLSpanElement>(null);
+  const inputElem = useRef<HTMLInputElement>(null);
+  const [editText, setEditText] = useState<string | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    if (textSizingDummyElem.current && inputElem.current) {
+      inputElem.current.style.width = `${textSizingDummyElem.current.clientWidth}px`;
+    }
+  });
+
+  function applyText() {
+    if (editText) {
+      setValue(() => editText);
+      setEditText(undefined);
+    }
+  }
+
   return (
     <div className={editorLine}>
       {prepend}
-      {JSON.stringify(value)}
+      {
+        editText == null
+        ? JSON.stringify(value)
+        : <>
+            "
+            <span className={textSizingDummy} ref={textSizingDummyElem}>{editText}</span>
+            <input className={editorTextBox} ref={inputElem} type="text" value={editText} onChange={(e) => setEditText(e.currentTarget.value)} />
+            "
+          </>
+      }
       {append}
-      <button className={editorButton}>
-        <FontAwesomeIcon icon={solid("pen")} />
-      </button>
+      <span className={editorButtonList}>
+        {
+          editText == null
+          ? <button className={editorButton} onClick={() => setEditText(value)}>
+              <FontAwesomeIcon icon={solid("pen")} />
+            </button>
+          : <>
+              <button className={editorButton} onClick={applyText}>
+                <FontAwesomeIcon icon={solid("check")} />
+              </button>
+              <button className={editorButton} onClick={() => setEditText(undefined)}>
+                <FontAwesomeIcon icon={solid("trash")} />
+              </button>
+            </>
+        }
+      </span>
     </div>
   );
 };
@@ -204,9 +243,13 @@ const editorLine = css`
   }
 `;
 
+const editorButtonList = css`
+  margin: 0 1em;
+  display: inline-flex;
+`;
+
 const editorButton = css`
   background: none;
-  margin: 0 1em;
   &:active {
     background-color: #cccccc;
   }
@@ -224,8 +267,41 @@ const editorButton = css`
   }
 `;
 
+const textSizingDummy = css`
+  position: absolute;
+  visibility: hidden;
+`;
+const editorTextBox = css`
+  display: inline-block;
+  width: auto;
 
-const stringEditor = css``;
+  border: none;
+  padding: 0;
+  font-style: inherit;
+  font-variant-ligatures: inherit;
+  font-variant-caps: inherit;
+  font-variant-numeric: inherit;
+  font-variant-east-asian: inherit;
+  font-variant-alternates: inherit;
+  font-weight: inherit;
+  font-stretch: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-optical-sizing: inherit;
+  font-kerning: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  text-rendering: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  word-spacing: inherit;
+  line-height: inherit;
+  text-transform: inherit;
+  text-indent: inherit;
+  text-shadow: inherit;
+  text-align: inherit;
+  appearance: inherit;
+`;
 
 function asRecord(obj: object): Record<string, unknown> {
   return obj as Record<string, unknown>;
