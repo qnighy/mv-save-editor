@@ -40,7 +40,7 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
   if (typeof value === "string") {
     return <StringEditor value={value} setValue={setValueHere} remove={remove} prepend={prepend} append={append} />;
   } else if (typeof value === "number") {
-    return <div className={editorLine}>{prepend}{JSON.stringify(value)}{append}</div>;
+    return <NumberEditor value={value} setValue={setValueHere} remove={remove} prepend={prepend} append={append} />;
   } else if (typeof value === "boolean") {
     return (
       <div className={editorLine}>
@@ -256,6 +256,78 @@ const StringEditor: React.FC<StringEditorProps> = (props) => {
   );
 };
 
+type NumberEditorProps = {
+  value: number;
+  setValue: (updater: (prevValue: unknown) => unknown) => void;
+  remove?: () => void;
+  prepend: React.ReactNode;
+  append: React.ReactNode;
+};
+
+const NumberEditor: React.FC<NumberEditorProps> = (props) => {
+  const { value, setValue, remove, prepend, append } = props;
+  const textSizingDummyElem = useRef<HTMLSpanElement>(null);
+  const inputElem = useRef<HTMLInputElement>(null);
+  const [editNumber, setEditNumber] = useState<string | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    if (textSizingDummyElem.current && inputElem.current) {
+      inputElem.current.style.width = `${textSizingDummyElem.current.clientWidth}px`;
+    }
+  });
+
+  function applyNumber() {
+    if (editNumber != null) {
+      setValue(() => {
+        const num = Number(editNumber);
+        return -Infinity < num && num < Infinity ? num : 0;
+      });
+      setEditNumber(undefined);
+    }
+  }
+
+  return (
+    <div className={editorLine}>
+      {prepend}
+      {
+        editNumber == null
+        ? JSON.stringify(value)
+        : <>
+            "
+            <span className={numberSizingDummy} ref={textSizingDummyElem}>{editNumber}</span>
+            <input className={editorTextBox} ref={inputElem} type="number" value={editNumber} onChange={(e) => setEditNumber(e.currentTarget.value)} />
+            "
+          </>
+      }
+      {append}
+      <span className={editorButtonList}>
+        {
+          editNumber == null
+          ? <>
+              <button className={editorButton} onClick={() => setEditNumber(`${value}`)}>
+                <FontAwesomeIcon icon={solid("pen")} />
+              </button>
+              {
+                remove &&
+                <button className={editorButton} onClick={remove}>
+                  <FontAwesomeIcon icon={solid("minus-circle")} />
+                </button>
+              }
+            </>
+          : <>
+              <button className={editorButton} onClick={applyNumber}>
+                <FontAwesomeIcon icon={solid("check")} />
+              </button>
+              <button className={editorButton} onClick={() => setEditNumber(undefined)}>
+                <FontAwesomeIcon icon={solid("trash")} />
+              </button>
+            </>
+        }
+      </span>
+    </div>
+  );
+};
+
 const summaryPlaceholder = css``;
 
 const accordion = css`
@@ -308,6 +380,11 @@ const editorButton = css`
 const textSizingDummy = css`
   position: absolute;
   visibility: hidden;
+`;
+const numberSizingDummy = css`
+  position: absolute;
+  visibility: hidden;
+  padding-left: 1em;
 `;
 const editorTextBox = css`
   display: inline-block;
