@@ -2,7 +2,7 @@ import type React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { JsonEditor2 } from './JsonEditor2';
+import { JsonEditor } from './JsonEditor';
 
 type WrapperProps = {
   defaultValue: unknown;
@@ -10,12 +10,12 @@ type WrapperProps = {
 const Wrapper: React.FC<WrapperProps> = (props) => {
   const { defaultValue } = props;
   const [value, setValue] = useState(defaultValue);
-  return <JsonEditor2 value={value} setValue={setValue} />;
+  return <JsonEditor value={value} setValue={setValue} />;
 };
 
 // More on how to set up stories at: https://storybook.js.org/docs/7.0/react/writing-stories/introduction
 const meta = {
-  title: 'JsonEditor2',
+  title: 'JsonEditor',
   component: Wrapper,
   tags: ['autodocs'],
 } satisfies Meta<typeof Wrapper>;

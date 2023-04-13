@@ -3,13 +3,13 @@ import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from "
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 
-export type JsonEditor2Props = {
+export type JsonEditorProps = {
   value: unknown;
   setValue: (updater: (prevValue: unknown) => unknown) => void;
 };
 
 const emptyPath: Path = [];
-export const JsonEditor2: React.FC<JsonEditor2Props> = (props) => {
+export const JsonEditor: React.FC<JsonEditorProps> = (props) => {
   const { value, setValue } = props;
   const setPartValue = useCallback((path: Path, updater: (prevValue: unknown) => unknown) => {
     setValue((prevValue) => updatePath(path, prevValue, updater));

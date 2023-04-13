@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useReducer, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import './App.css';
-import { JsonEditor2 } from './JsonEditor2';
+import { JsonEditor } from './JsonEditor';
 import { reduce, initialState, doImport, discard, getResult, edit } from './state';
 import { DownloadLink } from './DownloadLink';
 
@@ -83,7 +83,7 @@ function App() {
               <FontAwesomeIcon icon={solid("trash")} />
               Discard
             </button>
-            <JsonEditor2 value={state.editContent} setValue={setValue} />
+            <JsonEditor value={state.editContent} setValue={setValue} />
           </>
         )
       }
