@@ -23,17 +23,22 @@ type JsonPartEditorProps = {
   path: Path;
   value: unknown;
   setValue: (path: Path, updater: (prevValue: unknown) => unknown) => void;
+  remove?: () => void;
   prepend: React.ReactNode;
   append: React.ReactNode;
 };
 
 const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
-  const { path, value, setValue, prepend, append } = props;
+  const { path, value, setValue, remove, prepend, append } = props;
 
   const setValueHere = useCallback((updater: (prevValue: unknown) => unknown) => setValue(path, updater), [setValue, path]);
 
+  const removeChild = useCallback((key: Segment) => {
+    setValue(path, (prevValue) => removeKey(prevValue, key));
+  }, [setValue, path]);
+
   if (typeof value === "string") {
-    return <StringEditor value={value} setValue={setValueHere} prepend={prepend} append={append} />;
+    return <StringEditor value={value} setValue={setValueHere} remove={remove} prepend={prepend} append={append} />;
   } else if (typeof value === "number") {
     return <div className={editorLine}>{prepend}{JSON.stringify(value)}{append}</div>;
   } else if (typeof value === "boolean") {
@@ -69,6 +74,7 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
                   nextSegment={i}
                   value={elem}
                   setValue={setValue}
+                  removeChild={removeChild}
                   prepend={<span className={arrayIndex}>{`${i}: `}</span>}
                   append={i + 1 === a.length ? "" : ","}
                 />
@@ -98,6 +104,7 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
                   nextSegment={key}
                   value={value}
                   setValue={setValue}
+                  removeChild={removeChild}
                   prepend={`${JSON.stringify(key)}: `}
                   append={i + 1 === a.length ? "" : ","}
                 />
@@ -113,15 +120,19 @@ const JsonPartEditor: React.FC<JsonPartEditorProps> = React.memo((props) => {
   return null;
 });
 
-type JsonChildEditorProps = Omit<JsonPartEditorProps, "path"> & {
+type JsonChildEditorProps = Omit<JsonPartEditorProps, "path" | "remove"> & {
   parentPath: Path,
   nextSegment: Segment,
+  removeChild: (key: Segment) => void,
 };
 
 const JsonChildEditor: React.FC<JsonChildEditorProps> = (props) => {
-  const { parentPath, nextSegment, ...rest } = props;
+  const { parentPath, nextSegment, removeChild, ...rest } = props;
   const path = useMemo(() => [...parentPath, nextSegment], [parentPath, nextSegment]);
-  return <JsonPartEditor path={path} {...rest} />
+  const remove = useCallback(() => {
+    removeChild(nextSegment);
+  }, [removeChild, nextSegment])
+  return <JsonPartEditor path={path} remove={remove} {...rest} />
 };
 
 function updatePath(path: Path, prevValue: unknown, updater: (prevValue: unknown) => unknown): unknown {
@@ -158,15 +169,34 @@ function updatePath(path: Path, prevValue: unknown, updater: (prevValue: unknown
   return current;
 }
 
+function removeKey(obj: unknown, key: Segment): unknown {
+  if (Array.isArray(obj) && typeof key === "number") {
+    const newObj = [...obj];
+    newObj.splice(key, 1);
+    return newObj;
+  } else if (
+    typeof obj === "object"
+    && obj != null
+    && !Array.isArray(obj)
+    && typeof key === "string"
+  ) {
+    const newObj = { ...obj };
+    delete asRecord(newObj)[key];
+    return newObj;
+  }
+  return obj;
+}
+
 type StringEditorProps = {
   value: string;
   setValue: (updater: (prevValue: unknown) => unknown) => void;
+  remove?: () => void;
   prepend: React.ReactNode;
   append: React.ReactNode;
 };
 
 const StringEditor: React.FC<StringEditorProps> = (props) => {
-  const { value, setValue, prepend, append } = props;
+  const { value, setValue, remove, prepend, append } = props;
   const textSizingDummyElem = useRef<HTMLSpanElement>(null);
   const inputElem = useRef<HTMLInputElement>(null);
   const [editText, setEditText] = useState<string | undefined>(undefined);
@@ -201,9 +231,17 @@ const StringEditor: React.FC<StringEditorProps> = (props) => {
       <span className={editorButtonList}>
         {
           editText == null
-          ? <button className={editorButton} onClick={() => setEditText(value)}>
-              <FontAwesomeIcon icon={solid("pen")} />
-            </button>
+          ? <>
+              <button className={editorButton} onClick={() => setEditText(value)}>
+                <FontAwesomeIcon icon={solid("pen")} />
+              </button>
+              {
+                remove &&
+                <button className={editorButton} onClick={remove}>
+                  <FontAwesomeIcon icon={solid("minus-circle")} />
+                </button>
+              }
+            </>
           : <>
               <button className={editorButton} onClick={applyText}>
                 <FontAwesomeIcon icon={solid("check")} />
