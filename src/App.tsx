@@ -1,12 +1,10 @@
-import React, { useMemo, useReducer, useRef } from 'react';
+import React, { useCallback, useMemo, useReducer, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid } from '@fortawesome/fontawesome-svg-core/import.macro';
 import './App.css';
-import { JsonEditor } from './JsonEditor';
-import { reduce, initialState, doImport, discard, getResult } from './state';
+import { JsonEditor2 } from './JsonEditor2';
+import { reduce, initialState, doImport, discard, getResult, edit } from './state';
 import { DownloadLink } from './DownloadLink';
-
-const empty = [] as const;
 
 function App() {
   const [state, dispatch] = useReducer(reduce, initialState);
@@ -22,6 +20,9 @@ function App() {
     }
     return undefined;
   }, [result]);
+  const setValue = useCallback((updater: (prevValue: unknown) => unknown) => {
+    dispatch(edit(updater));
+  }, [dispatch]);
   return (
     <div className="App">
       <h1>Save Editor</h1>
@@ -82,14 +83,7 @@ function App() {
               <FontAwesomeIcon icon={solid("trash")} />
               Discard
             </button>
-            <JsonEditor
-              dispatch={dispatch}
-              editContent={state.editContent}
-              path1={empty}
-              path2={"editContent"}
-              prepend=""
-              append=""
-            />
+            <JsonEditor2 value={state.editContent} setValue={setValue} />
           </>
         )
       }

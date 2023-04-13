@@ -19,23 +19,15 @@ export type FailImportAction = {
 export type FinishImportAction = {
   readonly type: "IMPORT/FINISH";
   readonly filename?: string | undefined;
-  readonly content: JSONValue;
+  readonly content: unknown;
 };
 export type EditAction = {
   readonly type: "EDIT";
-  readonly path: readonly (number | string)[];
-  readonly newValue: JSONValue;
+  readonly updater: (prevValue: unknown) => unknown;
 };
 export type DiscardAction = {
   readonly type: "DISCARD";
 };
-
-export type JSONValue = JSONObject | JSONArray | string | number | boolean | null;
-export type JSONObject = {
-  readonly [key: string]: JSONValue;
-};
-export type JSONArray = readonly JSONValue[];
-export type JSONPath = readonly (string | number)[];
 
 export function startImport(filename: string | undefined): StartImportAction {
   return { type: "IMPORT/START", filename };
@@ -43,11 +35,11 @@ export function startImport(filename: string | undefined): StartImportAction {
 export function failImport(error: string): FailImportAction {
   return { type: "IMPORT/FAIL", error };
 }
-export function finishImport(filename: string | undefined, content: JSONValue): FinishImportAction {
+export function finishImport(filename: string | undefined, content: unknown): FinishImportAction {
   return { type: "IMPORT/FINISH", filename, content };
 }
-export function edit(path: readonly (number | string)[], newValue: JSONValue): EditAction {
-  return { type: "EDIT", path, newValue };
+export function edit(updater: (prevValue: unknown) => unknown): EditAction {
+  return { type: "EDIT", updater };
 }
 export function discard(): DiscardAction {
   return { type: "DISCARD" };
@@ -73,7 +65,7 @@ export function doImport(dispatch: React.Dispatch<Action>, file: Blob | string) 
   });
 }
 
-export function getResult(content: JSONValue): string {
+export function getResult(content: unknown): string {
   return LZString.compressToBase64(JSON.stringify(content));
 }
 
@@ -81,7 +73,7 @@ export type State = {
   readonly importing: boolean;
   readonly importError?: string | undefined;
   readonly filename?: string | undefined;
-  readonly editContent?: JSONValue | undefined;
+  readonly editContent?: unknown;
 };
 
 export const initialState: State = {
@@ -107,9 +99,7 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
       (state as any).editContent = action.content;
       break;
     case "EDIT":
-      if ((state as any).editContent !== undefined) {
-        applyEdit(state as any, action.path, action.newValue);
-      }
+      state.editContent = action.updater(state.editContent);
       break;
     case "DISCARD":
       state.importing = false;
@@ -119,32 +109,3 @@ export const reduce = produce<(state: State, action: Action) => State>((state, a
       break;
   }
 });
-
-function applyEdit(editContent: any, path: readonly (number | string)[], newValue: JSONValue) {
-  let currentRef: [any, string | number] = [] as any;
-  let current = editContent;
-  for (const segment of path) {
-    if (typeof segment === "string" && isObject(current) && !Array.isArray(current)) {
-      if (Object.hasOwn(current, segment)) {
-        currentRef = [current, segment];
-        current = (current as any)[segment];
-        continue;
-      }
-    } else if (typeof segment === "number" && Array.isArray(current)) {
-      if (Object.hasOwn(current, segment)) {
-        currentRef = [current, segment];
-        current = current[segment];
-        continue;
-      }
-    }
-    return;
-  }
-  {
-    const [current, segment] = currentRef;
-    (current as any)[segment] = newValue;
-  }
-}
-
-function isObject(x: unknown): x is object {
-  return (typeof x === "object" || typeof x === "function") && x !== null;
-}
