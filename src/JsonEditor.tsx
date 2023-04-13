@@ -208,7 +208,7 @@ const StringEditor: React.FC<StringEditorProps> = (props) => {
   });
 
   function applyText() {
-    if (editText) {
+    if (editText != null) {
       setValue(() => editText);
       setEditText(undefined);
     }
@@ -380,6 +380,7 @@ const editorButton = css`
 const textSizingDummy = css`
   position: absolute;
   visibility: hidden;
+  min-width: 1em;
 `;
 const numberSizingDummy = css`
   position: absolute;
